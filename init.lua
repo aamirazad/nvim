@@ -1,2 +1,2 @@
 require("aamira")
-print("hello") 
+require("packer")
