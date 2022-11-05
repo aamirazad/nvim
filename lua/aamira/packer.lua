@@ -22,4 +22,5 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
   'nvim-lualine/lualine.nvim',
   requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 }
+  use 'ThePrimeagen/vim-be-good'
 end)
