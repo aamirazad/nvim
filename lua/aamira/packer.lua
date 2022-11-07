@@ -25,4 +25,5 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
   requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 }
   use 'ThePrimeagen/vim-be-good'
+  use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
 end)
