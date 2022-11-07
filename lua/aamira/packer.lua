@@ -3,7 +3,9 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
  return require('packer').startup(function()
   -- Packer can manage itself
   use { "wbthomason/packer.nvim" }
+  use 'lewis6991/impatient.nvim'
   use 'wakatime/vim-wakatime'
+  use 'nvim-lua/plenary.nvim'
   use 'folke/tokyonight.nvim'
   use {
   "max397574/better-escape.nvim",

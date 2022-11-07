@@ -80,6 +80,11 @@ _G.packer_plugins = {
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/better-escape.nvim",
     url = "https://github.com/max397574/better-escape.nvim"
   },
+  ["impatient.nvim"] = {
+    loaded = true,
+    path = "/home/aamir/.local/share/nvim/site/pack/packer/start/impatient.nvim",
+    url = "https://github.com/lewis6991/impatient.nvim"
+  },
   ["lualine.nvim"] = {
     loaded = true,
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/lualine.nvim",
@@ -99,6 +104,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
+  },
+  ["plenary.nvim"] = {
+    loaded = true,
+    path = "/home/aamir/.local/share/nvim/site/pack/packer/start/plenary.nvim",
+    url = "https://github.com/nvim-lua/plenary.nvim"
   },
   ["tokyonight.nvim"] = {
     loaded = true,

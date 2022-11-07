@@ -1,3 +1,11 @@
+--[=====[
+  _____     _                _   _ _       _     _   
+ |_   _|__ | | _____  ___   | \ | (_) __ _| |__ | |_ 
+   | |/ _ \| |/ / _ \/ _ \  |  \| | |/ _` | '_ \| __|
+   | | (_) |   <  __/ (_) | | |\  | | (_| | | | | |_ 
+   |_|\___/|_|\_\___|\___/  |_| \_|_|\__, |_| |_|\__|
+                                     |___/           
+--]=====]
 vim.g.tokyonight_transparent_sidebar = true
 vim.g.tokyonight_transparent = true
 vim.opt.background = "dark"
@@ -15,6 +23,14 @@ vim.opt.background = "dark"
   })
 
   vim.cmd("colorscheme tokyonight-moon")
+--[===[
+  _                _     _            
+ | |   _   _  __ _| |   (_)_ __   ___ 
+ | |  | | | |/ _` | |   | | '_ \ / _ \
+ | |__| |_| | (_| | |___| | | | |  __/
+ |_____\__,_|\__,_|_____|_|_| |_|\___|
+                                      
+ --]===]
 require('lualine').setup {
   options = {
     icons_enabled = true,
@@ -51,11 +67,19 @@ require('lualine').setup {
     lualine_z = {}
   },
   tabline = {},
-  winbar = {},
+  [inbar = {},
   inactive_winbar = {},
   extensions = {}
 }
 -- examples for your init.lua
+--[===[
+  _   _       _         _____              
+ | \ | |_   _(_)_ __ __|_   _| __ ___  ___ 
+ |  \| \ \ / / | '_ ` _ \| || '__/ _ \/ _ \
+ | |\  |\ V /| | | | | | | || | |  __/  __/
+ |_| \_| \_/ |_|_| |_| |_|_||_|  \___|\___|
+                                           
+ --]===]
 
 -- disable netrw at the very start of your init.lua (strongly advised)
 vim.g.loaded_netrw = 1
