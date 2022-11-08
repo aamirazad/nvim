@@ -26,4 +26,13 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 }
   use 'ThePrimeagen/vim-be-good'
   use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
+  use {
+    'goolord/alpha-nvim',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    config = function ()
+        require'alpha'.setup(require'alpha.themes.startify'.config)
+    end
+}
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+  use 'nvim-telescope/telescope.nvim'
 end)
