@@ -35,4 +35,6 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
   use 'nvim-telescope/telescope.nvim'
+  use 'lukas-reineke/indent-blankline.nvim'
+  use 'ThePrimeagen/harpoon'
 end)
