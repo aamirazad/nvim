@@ -122,3 +122,7 @@ vim.opt.listchars:append "eol:↴"
 require("indent_blankline").setup {
     show_end_of_line = true,
 }
+
+
+require'lspconfig'.quick_lint_js.setup{}
+require'lspconfig'.cmake.setup{}

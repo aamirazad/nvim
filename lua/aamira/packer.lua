@@ -39,5 +39,4 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
   use 'ThePrimeagen/harpoon'
   use { 'ms-jpq/coq_nvim', branch = 'coq'}
   use { 'ms-jpq/coq.artifacts', branch = 'artifacts'}
-  use 'github/copilot.vim'
 end)
