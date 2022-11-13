@@ -126,3 +126,6 @@ require("indent_blankline").setup {
 
 require'lspconfig'.quick_lint_js.setup{}
 require'lspconfig'.cmake.setup{}
+local lsp = require "lspconfig"
+local coq = require "coq" -- add this
+vim.cmd('COQnow -s')
