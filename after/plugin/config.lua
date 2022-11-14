@@ -122,10 +122,16 @@ vim.opt.listchars:append "eol:↴"
 require("indent_blankline").setup {
     show_end_of_line = true,
 }
+--[[==[
+  _    ___ ___ 
+ | |  / __| _ \
+ | |__\__ \  _/
+ |____|___/_|  
+               
+--]==]]
 
-
-require'lspconfig'.quick_lint_js.setup{}
-require'lspconfig'.cmake.setup{}
 local lsp = require "lspconfig"
 local coq = require "coq" -- add this
+require'lspconfig'.cmake.setup{}
+require'lspconfig'.denols.setup{}
 vim.cmd('COQnow -s')
