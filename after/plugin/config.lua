@@ -135,3 +135,4 @@ local coq = require "coq" -- add this
 require'lspconfig'.cmake.setup{}
 require'lspconfig'.denols.setup{}
 vim.cmd('COQnow -s')
+
