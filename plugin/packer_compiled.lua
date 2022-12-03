@@ -91,16 +91,6 @@ _G.packer_plugins = {
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/copilot.vim",
     url = "https://github.com/github/copilot.vim"
   },
-  ["coq.artifacts"] = {
-    loaded = true,
-    path = "/home/aamir/.local/share/nvim/site/pack/packer/start/coq.artifacts",
-    url = "https://github.com/ms-jpq/coq.artifacts"
-  },
-  coq_nvim = {
-    loaded = true,
-    path = "/home/aamir/.local/share/nvim/site/pack/packer/start/coq_nvim",
-    url = "https://github.com/ms-jpq/coq_nvim"
-  },
   harpoon = {
     loaded = true,
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/harpoon",
