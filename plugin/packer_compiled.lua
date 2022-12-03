@@ -86,10 +86,10 @@ _G.packer_plugins = {
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/better-escape.nvim",
     url = "https://github.com/max397574/better-escape.nvim"
   },
-  ["copilot.lua"] = {
+  ["copilot.vim"] = {
     loaded = true,
-    path = "/home/aamir/.local/share/nvim/site/pack/packer/start/copilot.lua",
-    url = "https://github.com/zbirenbaum/copilot.lua"
+    path = "/home/aamir/.local/share/nvim/site/pack/packer/start/copilot.vim",
+    url = "https://github.com/github/copilot.vim"
   },
   ["coq.artifacts"] = {
     loaded = true,
@@ -160,6 +160,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/tokyonight.nvim",
     url = "https://github.com/folke/tokyonight.nvim"
+  },
+  undotree = {
+    loaded = true,
+    path = "/home/aamir/.local/share/nvim/site/pack/packer/start/undotree",
+    url = "https://github.com/mbbill/undotree"
   },
   ["vim-be-good"] = {
     loaded = true,
