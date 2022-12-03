@@ -132,7 +132,7 @@ require("indent_blankline").setup {
 
 local lsp = require "lspconfig"
 local coq = require "coq" -- add this
-require'lspconfig'.cmake.setup{}
-require'lspconfig'.denols.setup{}
 vim.cmd('COQnow -s')
 
+require'lspconfig'.clangd.setup{coq.lsp_ensure_capabilities{}}
+require'lspconfig'.denols.setup{coq.lsp_ensure_capabilities{}}
