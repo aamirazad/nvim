@@ -39,4 +39,5 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
   use 'ThePrimeagen/harpoon'
   use 'github/copilot.vim'
   use 'mbbill/undotree'
+  use 'ms-jpq/coq_nvim'
 end)
