@@ -137,6 +137,7 @@ vim.cmd('COQnow -s')
 
 require'lspconfig'.clangd.setup{coq.lsp_ensure_capabilities{}}
 require'lspconfig'.denols.setup{coq.lsp_ensure_capabilities{}}
+require'lspconfig'.tailwindcss.setup{coq.lsp_ensure_capabilities{}}
 
 require("coq_3p") {
     { src = "figlet", short_name = "BIG", trigger = "!big" },
