@@ -40,5 +40,7 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
   use 'github/copilot.vim'
   use 'mbbill/undotree'
   use 'ms-jpq/coq_nvim'
+  use 'ms-jpq/coq.artifacts'
   use 'ms-jpq/coq.thirdparty'
 end)
+

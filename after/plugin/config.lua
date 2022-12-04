@@ -133,12 +133,14 @@ require("indent_blankline").setup {
 local lsp = require "lspconfig"
 
 local coq = require "coq" -- add this
-vim.cmd('COQnow')
+vim.cmd('COQnow -s')
 
 require'lspconfig'.clangd.setup{coq.lsp_ensure_capabilities{}}
 require'lspconfig'.denols.setup{coq.lsp_ensure_capabilities{}}
 
 require("coq_3p") {
-    { src = "figlet", short_name = "BIG" },
+    { src = "figlet", short_name = "BIG", trigger = "!big" },
     { src = "copilot", short_name = "COP", accept_key = "<c-f>" },
+    { src = "nvimlua", short_name = "nLUA", conf_only = true },
 }
+
