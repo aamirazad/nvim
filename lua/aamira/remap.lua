@@ -22,4 +22,3 @@ nnoremap("<leader>sp", "<cmd>setlocal spell spelllang=en_us<CR>")
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
 vim.keymap.set("n", "<leader>Y", "\"+Y")
-
