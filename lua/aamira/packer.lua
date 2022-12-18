@@ -71,5 +71,6 @@ use {
   end
 }
   use('tpope/vim-fugitive')
+  use 'ms-jpq/coq.thirdparty'
 end)
 

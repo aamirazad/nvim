@@ -143,7 +143,9 @@ lsp.ensure_installed({
 
 lsp.setup()
 
-
+require("coq_3p") {
+  { src = "copilot", short_name = "COP", accept_key = "<c-f>" },
+}
 --[[==[
 
 
@@ -177,4 +179,5 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = false,
   },
 }
+
 

@@ -121,6 +121,11 @@ _G.packer_plugins = {
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/copilot.vim",
     url = "https://github.com/github/copilot.vim"
   },
+  ["coq.thirdparty"] = {
+    loaded = true,
+    path = "/home/aamir/.local/share/nvim/site/pack/packer/start/coq.thirdparty",
+    url = "https://github.com/ms-jpq/coq.thirdparty"
+  },
   ["friendly-snippets"] = {
     loaded = true,
     path = "/home/aamir/.local/share/nvim/site/pack/packer/start/friendly-snippets",
