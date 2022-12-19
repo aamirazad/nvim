@@ -116,6 +116,7 @@ require('telescope').setup {
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
 
+
 vim.opt.list = true
 vim.opt.listchars:append "eol:↴"
 -- Indent Blankline
@@ -130,21 +131,73 @@ require("indent_blankline").setup {
                
 --]==]]
 
-local lsp = require "lspconfig"
+local lsp = require('lsp-zero')
 
-local coq = require "coq" -- add this
-vim.cmd('COQnow -s')
+lsp.preset('recommended')
+lsp.ensure_installed({
+  'eslint',
+  'sumneko_lua',
+  'clangd',
+  'yamlls',
+})
 
-require'lspconfig'.clangd.setup{coq.lsp_ensure_capabilities{}}
-require'lspconfig'.denols.setup{coq.lsp_ensure_capabilities{}}
-require'lspconfig'.tailwindcss.setup{coq.lsp_ensure_capabilities{}}
-require'lspconfig'.yamlls.setup{coq.lsp_ensure_capabilities{}}
-require'lspconfig'.emmet_ls.setup{coq.lsp_ensure_capabilities{}}
-
+lsp.setup()
 
 require("coq_3p") {
-    { src = "figlet", short_name = "BIG", trigger = "!big" },
-    { src = "copilot", short_name = "COP", accept_key = "<c-f>" },
-    { src = "nvimlua", short_name = "nLUA", conf_only = true },
+  { src = "copilot", short_name = "COP", accept_key = "<c-f>" },
 }
+
+
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  update_in_insert = false,
+  underline = true,
+  severity_sort = false,
+  float = true,
+})
+
+require'lspconfig'.sumneko_lua.setup {
+  settings = {
+      Lua = {
+          diagnostics = {
+              globals = { 'vim' }
+          }
+      }
+  }
+}
+--[[==[
+
+
+  _____               _ _   _           
+ |_   _| _ ___ ___ __(_) |_| |_ ___ _ _ 
+   | || '_/ -_) -_|_-< |  _|  _/ -_) '_|
+   |_||_| \___\___/__/_|\__|\__\___|_|  
+                                        
+
+--]==]]
+
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "c", "lua", "javascript", "html" },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = true,
+
+  highlight = {
+    -- `false` will disable the whole extension
+    enable = true,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+
 
