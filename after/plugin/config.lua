@@ -156,6 +156,16 @@ vim.diagnostic.config({
   severity_sort = false,
   float = true,
 })
+
+require'lspconfig'.sumneko_lua.setup {
+  settings = {
+      Lua = {
+          diagnostics = {
+              globals = { 'vim' }
+          }
+      }
+  }
+}
 --[[==[
 
 
