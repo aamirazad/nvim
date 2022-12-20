@@ -1,6 +1,6 @@
 local nnoremap = require("aamira.keyinit").nnoremap
 
-nnoremap("<leader>tr", "<cmd>NvimTreeToggle<CR>")
+vim.keymap.set("n", "<leader>tr", "<cmd>NvimTreeToggle<CR>")
 nnoremap("<leader>Tr", "<cmd>NvimTreeToggle /home/aamir/.config/nvim<CR>")
 nnoremap("<leader>cw", ":%s//g<Left><Left>")
 nnoremap("<leader>js", "<cmd>w<CR><cmd>!node %<CR>")
