@@ -38,7 +38,10 @@ return require('packer').startup(function()
     use { 'ThePrimeagen/harpoon' }
     use { 'github/copilot.vim' }
     use { 'mbbill/undotree' }
-    use {'nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'}}
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = {':TSUpdate'}
+    }
     use {
         'VonHeikemen/lsp-zero.nvim',
         requires = {
@@ -70,7 +73,8 @@ return require('packer').startup(function()
             }
         end
     }
-    use('tpope/vim-fugitive')
-    use 'ms-jpq/coq.thirdparty'
+    use { 'tpope/vim-fugitive' }
+    use { 'ms-jpq/coq.thirdparty' }
+    use { 'm4xshen/autoclose.nvim' }
 end)
 
