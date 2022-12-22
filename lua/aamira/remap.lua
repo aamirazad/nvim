@@ -1,5 +1,3 @@
-local nnoremap = require("aamira.keyinit").nnoremap
-
 vim.keymap.set("n", "<leader>tr", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "<leader>Tr", "<cmd>NvimTreeToggle /home/aamir/.config/nvim<CR>")
 vim.keymap.set("n", "<leader>cw", ":%s//g<Left><Left>")
@@ -24,3 +22,4 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
+vim.keymap.set("n", "<leader>tt", "<cmd>TroubleToggle<CR>")
