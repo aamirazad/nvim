@@ -115,5 +115,6 @@ return require('packer').startup(function()
             }
         end
     }
+    use { 'rose-pine/neovim' }
 end)
 
