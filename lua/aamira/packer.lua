@@ -4,15 +4,8 @@ return require('packer').startup(function()
     -- Packer can manage itself
     use { "wbthomason/packer.nvim" }
     use { 'lewis6991/impatient.nvim' }
-    use { 'folke/tokyonight.nvim' }
     use { 'wakatime/vim-wakatime' }
     use { 'nvim-lua/plenary.nvim' }
-    use {
-        "max397574/better-escape.nvim",
-        config = function()
-            require("better_escape").setup()
-        end,
-    }
     use {
         'nvim-tree/nvim-tree.lua',
         requires = {
@@ -24,7 +17,6 @@ return require('packer').startup(function()
         'nvim-lualine/lualine.nvim',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
-    use { 'ThePrimeagen/vim-be-good' }
     use {
         'goolord/alpha-nvim',
         requires = { 'kyazdani42/nvim-web-devicons' },
@@ -63,19 +55,7 @@ return require('packer').startup(function()
             {'rafamadriz/friendly-snippets'},
         }
     }
-    use {
-        "folke/zen-mode.nvim",
-        config = function()
-            require("zen-mode").setup {
-                -- your configuration comes here
-                -- or leave it empty to use the default settings
-                -- refer to the configuration section below
-            }
-        end
-    }
-    use { 'tpope/vim-fugitive' }
     use { 'ms-jpq/coq.thirdparty' }
-    use { 'm4xshen/autoclose.nvim' }
     use {
         "folke/which-key.nvim",
         config = function()

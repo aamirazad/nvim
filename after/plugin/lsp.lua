@@ -9,7 +9,6 @@ local lsp = require('lsp-zero')
 lsp.preset('recommended')
 lsp.ensure_installed({
     'eslint',
-    'sumneko_lua',
     'clangd',
     'yamlls',
 })
@@ -30,13 +29,4 @@ vim.diagnostic.config({
     float = true,
 })
 
-require'lspconfig'.sumneko_lua.setup {
-    settings = {
-        Lua = {
-            diagnostics = {
-                globals = { 'vim', 'use' }
-            }
-        }
-    }
-}
-
+lsp.nvim_workspace()
