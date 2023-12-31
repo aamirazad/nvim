@@ -96,5 +96,6 @@ return require('packer').startup(function()
         end
     }
     use { 'rose-pine/neovim' }
+    use { 'tpope/vim-fugitive' }
 end)
 
