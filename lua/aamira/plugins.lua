@@ -78,4 +78,6 @@ return require("lazy").setup({
     },
     { 'rose-pine/neovim' },
     { 'tpope/vim-fugitive' },
+    { 'jose-elias-alvarez/null-ls.nvim'},
+    { 'MunifTanjim/prettier.nvim'},
 })
