@@ -16,3 +16,10 @@ vim.opt.incsearch = true
 vim.opt.termguicolors = true
 vim.opt.updatetime = 50
 vim.opt.scrolloff = 8
+vim.g.have_nerd_font = true
+-- Don't show the mode, since it's already in the status line
+vim.opt.showmode = false
+-- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
+-- instead raise a dialog asking if you wish to save the current file(s)
+-- See `:help 'confirm'`
+vim.opt.confirm = true

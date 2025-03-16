@@ -1,4 +1,3 @@
-vim.keymap.set("n", "<leader>tr", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "<leader>cw", ":%s//g<Left><Left>")
 vim.keymap.set("n", "<leader>js", "<cmd>w<CR><cmd>!node %<CR>")
 -- vim.keymap.set("n", "<leader>mf", '<cmd>lua require("harpoon.mark").add_file()<CR>')
@@ -23,11 +22,28 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<leader>tt", "<cmd>TroubleToggle<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 -- Back and forth buffer
-vim.keymap.set("n", "[b", ":bprevious<CR>")
-vim.keymap.set("n", "]b", ":bnext<CR>")
+vim.keymap.set("n", "[b", "<cmd>bprevious<CR>")
+vim.keymap.set("n", "]b", "<cmd>bnext<CR>")
+-- Close buffer
+vim.keymap.set("n", "<leader>bd", "<cmd>bd<CR>")
 -- Escape out of terminal
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+-- <C-\><C-n>
 -- Paste preserving clipboard
 vim.keymap.set("x", "<leader>p", '"_dP')
 -- remove Q
 vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
+vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
+vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+-- Highlight when yanking (copying) text
+--  Try it with `yap` in normal mode
+--  See `:help vim.highlight.on_yank()`
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
