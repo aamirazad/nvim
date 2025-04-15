@@ -534,13 +534,13 @@ return require("lazy").setup({
 					["<C-p>"] = cmp.mapping.select_prev_item(),
 
 					-- Scroll the documentation window [b]ack / [f]orward
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
+					-- ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+					-- ["<C-f>"] = cmp.mapping.scroll_docs(4),
 
 					-- Accept ([y]es) the completion.
 					--  This will auto-import if your LSP supports it.
 					--  This will expand snippets if the LSP sent a snippet.
-					["<C-y>"] = cmp.mapping.confirm({ select = true }),
+					["<C-f>"] = cmp.mapping.confirm({ select = true }),
 
 					-- If you prefer more traditional completion keymaps,
 					-- you can uncomment the following lines
@@ -732,60 +732,6 @@ return require("lazy").setup({
 			})
 		end,
 	},
-	-- {
-	-- 	"nvimtools/none-ls.nvim",
-	-- 	dependencies = {
-	-- 		"nvimtools/none-ls-extras.nvim",
-	-- 		"jayp0521/mason-null-ls.nvim", -- ensure dependencies are installed
-	-- 	},
-	-- 	config = function()
-	-- 		local null_ls = require("null-ls")
-	-- 		local formatting = null_ls.builtins.formatting -- to setup formatters
-	-- 		local diagnostics = null_ls.builtins.diagnostics -- to setup linters
-	--
-	-- 		-- Formatters & linters for mason to install
-	-- 		require("mason-null-ls").setup({
-	-- 			ensure_installed = {
-	-- 				"prettier", -- ts/js formatter
-	-- 				"stylua", -- lua formatter
-	-- 				"eslint_d", -- ts/js linter
-	-- 				"shfmt", -- Shell formatter
-	-- 				"checkmake", -- linter for Makefiles
-	-- 				"ruff", -- Python linter and formatter
-	-- 			},
-	-- 			automatic_installation = true,
-	-- 		})
-	--
-	-- 		local sources = {
-	-- 			diagnostics.checkmake,
-	-- 			formatting.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
-	-- 			formatting.stylua,
-	-- 			formatting.shfmt.with({ args = { "-i", "4" } }),
-	-- 			formatting.terraform_fmt,
-	-- 			require("none-ls.formatting.ruff").with({ extra_args = { "--extend-select", "I" } }),
-	-- 			require("none-ls.formatting.ruff_format"),
-	-- 		}
-	--
-	-- 		local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-	-- 		null_ls.setup({
-	-- 			-- debug = true, -- Enable debug mode. Inspect logs with :NullLsLog.
-	-- 			sources = sources,
-	-- 			-- you can reuse a shared lspconfig on_attach callback here
-	-- 			on_attach = function(client, bufnr)
-	-- 				if client.supports_method("textDocument/formatting") then
-	-- 					vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-	-- 					vim.api.nvim_create_autocmd("BufWritePre", {
-	-- 						group = augroup,
-	-- 						buffer = bufnr,
-	-- 						callback = function()
-	-- 							vim.lsp.buf.format({ async = false })
-	-- 						end,
-	-- 					})
-	-- 				end
-	-- 			end,
-	-- 		})
-	-- 	end,
-	-- },
 	{ -- Autoformat
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },

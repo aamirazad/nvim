@@ -8,6 +8,7 @@ vim.keymap.set("n", "<leader>js", "<cmd>w<CR><cmd>!node %<CR>")
 -- vim.keymap.set("n", "<leader>4", '<cmd>lua require("harpoon.ui").nav_file(4)<CR>')
 vim.keymap.set("n", "<leader>ut", "<cmd>:UndotreeToggle<CR>")
 vim.keymap.set("n", "<leader>tm", "<cmd>terminal<CR>")
+-- Half page move, center cursor
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<leader>sp", "<cmd>setlocal spell spelllang=en_us<CR>")
