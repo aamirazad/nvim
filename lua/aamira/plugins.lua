@@ -769,10 +769,6 @@ return require("lazy").setup({
 				-- Conform can also run multiple formatters sequentially
 				python = { "black" },
 				--
-				javascript = { "prettierd" },
-				typescript = { "prettierd" },
-				javascriptreact = { "prettierd" },
-				typescriptreact = { "prettierd" },
 			},
 		},
 	},
