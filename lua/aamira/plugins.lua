@@ -291,7 +291,12 @@ return require("lazy").setup({
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
 
 					-- Get code error
-					vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostics in floating window" })
+					vim.keymap.set(
+						"n",
+						"<leader>e",
+						vim.diagnostic.open_float,
+						{ desc = "Show diagnostics in floating window" }
+					)
 
 					-- WARN: This is not Goto Definition, this is Goto Declaration.
 					--  For example, in C this would take you to the header.
@@ -515,7 +520,7 @@ return require("lazy").setup({
 					-- Accept ([y]es) the completion.
 					--  This will auto-import if your LSP supports it.
 					--  This will expand snippets if the LSP sent a snippet.
-					["<C-j>"] = cmp.mapping.confirm({ select = true }),
+					["<C-f>"] = cmp.mapping.confirm({ select = true }),
 
 					-- If you prefer more traditional completion keymaps,
 					-- you can uncomment the following lines
@@ -744,7 +749,20 @@ return require("lazy").setup({
 				-- Conform can also run multiple formatters sequentially
 				python = { "black" },
 				--
+				typescript = { "biome" },
 			},
 		},
+	},
+	{
+		"zbirenbaum/copilot.lua",
+		dependencies = {
+			"copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
+		},
+	},
+	{
+		"zbirenbaum/copilot-cmp",
+		config = function()
+			require("copilot_cmp").setup()
+		end,
 	},
 })
