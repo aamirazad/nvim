@@ -459,7 +459,7 @@ return require("lazy").setup({
 			--  nvim-cmp does not ship with all sources by default. They are split
 			--  into multiple repos for maintenance purposes.
 			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
+			-- "hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 		},
 		config = function()
@@ -575,6 +575,7 @@ return require("lazy").setup({
 					end, { "i", "s" }),
 				}),
 				sources = {
+					{ name = "copilot" },
 					{
 						name = "lazydev",
 						-- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
@@ -582,7 +583,7 @@ return require("lazy").setup({
 					},
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
-					{ name = "buffer" },
+					-- { name = "buffer" },
 					{ name = "path" },
 				},
 				formatting = {
@@ -757,7 +758,20 @@ return require("lazy").setup({
 		"zbirenbaum/copilot.lua",
 		dependencies = {
 			"copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
+			config = function()
+				vim.g.copilot_nes_debounce = 500
+			end,
 		},
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({
+				require("copilot").setup({
+					suggestion = { enabled = false },
+					panel = { enabled = false },
+				}),
+			})
+		end,
 	},
 	{
 		"zbirenbaum/copilot-cmp",
