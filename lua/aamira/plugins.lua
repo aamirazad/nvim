@@ -8,6 +8,7 @@ return require("lazy").setup({
 		version = "*",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
+
 			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
 			"MunifTanjim/nui.nvim",
 		},
@@ -575,7 +576,6 @@ return require("lazy").setup({
 					end, { "i", "s" }),
 				}),
 				sources = {
-					{ name = "copilot" },
 					{
 						name = "lazydev",
 						-- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
@@ -753,30 +753,5 @@ return require("lazy").setup({
 				typescript = { "biome" },
 			},
 		},
-	},
-	{
-		"zbirenbaum/copilot.lua",
-		dependencies = {
-			"copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
-			config = function()
-				vim.g.copilot_nes_debounce = 500
-			end,
-		},
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("copilot").setup({
-				require("copilot").setup({
-					suggestion = { enabled = false },
-					panel = { enabled = false },
-				}),
-			})
-		end,
-	},
-	{
-		"zbirenbaum/copilot-cmp",
-		config = function()
-			require("copilot_cmp").setup()
-		end,
 	},
 })
