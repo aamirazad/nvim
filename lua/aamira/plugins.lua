@@ -1,6 +1,5 @@
 vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 return require("lazy").setup({
-	{ "lewis6991/impatient.nvim" },
 	{ "wakatime/vim-wakatime" },
 	{ "nvim-lua/plenary.nvim" },
 	{
@@ -18,6 +17,7 @@ return require("lazy").setup({
 		},
 		opts = {
 			filesystem = {
+				hijack_netrw_behavior = "/pen_current",
 				window = {
 					mappings = {
 						["\\"] = "close_window",
@@ -28,18 +28,60 @@ return require("lazy").setup({
 	},
 	{
 		"nvim-lualine/lualine.nvim",
-		dependencies = { "kyazdani42/nvim-web-devicons", lazy = true },
+		dependencies = { "nvim-tree/nvim-web-devicons", lazy = true },
+		config = function()
+			require("lualine").setup({
+				options = {
+					icons_enabled = true,
+					theme = "auto",
+					component_separators = { left = "", right = "" },
+					section_separators = { left = "", right = "" },
+					disabled_filetypes = {
+						statusline = {},
+						winbar = {},
+					},
+					ignore_focus = {},
+					always_divide_middle = true,
+					globalstatus = false,
+					refresh = {
+						statusline = 1000,
+						tabline = 1000,
+						winbar = 1000,
+					},
+				},
+				sections = {
+					lualine_a = { "mode" },
+					lualine_b = { "branch", "diff", "diagnostics" },
+					lualine_c = { "filename" },
+					lualine_x = { "encoding", "fileformat", "filetype" },
+					lualine_y = { "progress" },
+					lualine_z = { "location" },
+				},
+				inactive_sections = {
+					lualine_a = {},
+					lualine_b = {},
+					lualine_c = { "filename" },
+					lualine_x = { "location" },
+					lualine_y = {},
+					lualine_z = {},
+				},
+				tabline = {},
+				winbar = {},
+				inactive_winbar = {},
+				extensions = {},
+			})
+		end,
 	},
 	{
 		"goolord/alpha-nvim",
-		dependencies = { "kyazdani42/nvim-web-devicons" },
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			require("alpha").setup(require("alpha.themes.startify").config)
 		end,
 	},
 	{
 		"nvim-telescope/telescope-fzf-native.nvim",
-		build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+		build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release --target install",
 	},
 	{ -- Fuzzy Finder (files, lsp, etc)
 		"nvim-telescope/telescope.nvim",
@@ -102,6 +144,10 @@ return require("lazy").setup({
 						require("telescope.themes").get_dropdown(),
 					},
 				},
+			}, {
+				rocks = {
+					enabled = false,
+				},
 			})
 
 			-- Enable Telescope extensions if they are installed
@@ -145,12 +191,22 @@ return require("lazy").setup({
 			end, { desc = "[S]earch [N]eovim files" })
 		end,
 	},
-	{ "lukas-reineke/indent-blankline.nvim" },
-	{ "ThePrimeagen/harpoon" },
 	{ "mbbill/undotree" },
 	{
 		"nvim-treesitter/nvim-treesitter",
-		build = { ":TSUpdate" },
+		build = ":TSUpdate",
+		opts = {
+			sync_install = false,
+			auto_install = true,
+			highlight = {
+				enable = true,
+				additional_vim_regex_highlighting = false,
+			},
+			indent = { enable = true },
+		},
+		config = function(_, opts)
+			require("nvim-treesitter.config").setup(opts)
+		end,
 	},
 	{
 		"folke/which-key.nvim",
@@ -165,7 +221,7 @@ return require("lazy").setup({
 	{ "folke/lsp-colors.nvim" },
 	{
 		"folke/trouble.nvim",
-		dependencies = "kyazdani42/nvim-web-devicons",
+		dependencies = "nvim-tree/nvim-web-devicons",
 		config = function()
 			require("trouble").setup({
 				-- your configuration comes here
@@ -191,10 +247,17 @@ return require("lazy").setup({
 			})
 		end,
 	},
-	{ "rose-pine/neovim" },
-	{ "tpope/vim-fugitive" },
-	{ "jose-elias-alvarez/null-ls.nvim" },
-	{ "MunifTanjim/prettier.nvim" },
+	{
+		"rose-pine/neovim",
+		priority = 1000,
+		config = function()
+			vim.opt.background = "dark"
+			require("rose-pine").setup({
+				disable_background = true,
+			})
+			vim.cmd("colorscheme rose-pine")
+		end,
+	},
 	{
 		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
@@ -237,6 +300,22 @@ return require("lazy").setup({
 			-- If you're wondering about lsp vs treesitter, you can check out the wonderfully
 			-- and elegantly composed help section, `:help lsp-vs-treesitter`
 
+			local diagnostic_icons = {
+				Error = "",
+				Warn = "",
+				Hint = "",
+				Info = "",
+			}
+			for type, icon in pairs(diagnostic_icons) do
+				local hl = "DiagnosticSign" .. type
+				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+			end
+			vim.diagnostic.config({
+				virtual_text = { prefix = "●" },
+				float = { border = "rounded", source = "if_many" },
+				severity_sort = true,
+				update_in_insert = false,
+			})
 			--  This function gets run when an LSP attaches to a particular buffer.
 			--    That is to say, every time a new file is opened that is associated with
 			--    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
@@ -253,6 +332,7 @@ return require("lazy").setup({
 						mode = mode or "n"
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
 
 					-- Jump to the definition of the word under your cursor.
 					--  This is where a variable was first declared, or where a function is defined, etc.
@@ -308,40 +388,37 @@ return require("lazy").setup({
 					--    See `:help CursorHold` for information about when this is executed
 					--
 					-- When you move your cursor, the highlights will be cleared (the second autocommand).
-					-- local client = vim.lsp.get_client_by_id(event.data.client_id)
-					-- if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-					-- 	local highlight_augroup =
-					-- 		vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
-					-- 	vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-					-- 		buffer = event.buf,
-					-- 		group = highlight_augroup,
-					-- 		callback = vim.lsp.buf.document_highlight,
-					-- 	})
-					--
-					-- 	vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-					-- 		buffer = event.buf,
-					-- 		group = highlight_augroup,
-					-- 		callback = vim.lsp.buf.clear_references,
-					-- 	})
-					--
-					-- 	vim.api.nvim_create_autocmd("LspDetach", {
-					-- 		group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
-					-- 		callback = function(event2)
-					-- 			vim.lsp.buf.clear_references()
-					-- 			vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
-					-- 		end,
-					-- 	})
-					-- end
+					local client = vim.lsp.get_clients({ id = event.data.client_id })[1]
+					if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+						local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
+						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+							buffer = event.buf,
+							group = highlight_augroup,
+							callback = vim.lsp.buf.document_highlight,
+						})
+						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+							buffer = event.buf,
+							group = highlight_augroup,
+							callback = vim.lsp.buf.clear_references,
+						})
+						vim.api.nvim_create_autocmd("LspDetach", {
+							group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
+							callback = function(event2)
+								vim.lsp.buf.clear_references()
+								vim.api.nvim_clear_autocmds({ group = "lsp-highlight", buffer = event2.buf })
+							end,
+						})
+					end
 
 					-- The following code creates a keymap to toggle inlay hints in your
 					-- code, if the language server you are using supports them
 					--
 					-- This may be unwanted, since they displace some of your code
-					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-						map("<leader>th", function()
-							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-						end, "[T]oggle Inlay [H]ints")
-					end
+					-- if client then
+					-- 	map("<leader>th", function()
+					-- 		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+					-- 	end, "[T]oggle Inlay [H]ints")
+					-- end
 				end,
 			})
 
@@ -362,39 +439,20 @@ return require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				-- clangd = {},
-				-- gopls = {},
-				-- pyright = {},
-				-- rust_analyzer = {},
-				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-				--
-				-- Some languages (like typescript) have entire language plugins that can be useful:
-				--    https://github.com/pmizio/typescript-tools.nvim
-				--
-				lua_ls = {
-					-- cmd = {...},
-					-- filetypes = { ...},
-					-- capabilities = {},
+				gopls = {
 					settings = {
-						Lua = {
-							completion = {
-								callSnippet = "Replace",
+						gopls = {
+							analyses = {
+								unusedparams = true,
+								shadow = true,
 							},
-							runtime = { version = "LuaJIT" },
-							workspace = {
-								checkThirdParty = false,
-								library = {
-									"${3rd}/luv/library",
-									unpack(vim.api.nvim_get_runtime_file("", true)),
-								},
-							},
-							diagnostics = { disable = { "missing-fields" } },
-							format = {
-								enable = false,
-							},
+							staticcheck = true,
+							gofumpt = true,
 						},
 					},
 				},
+				pyright = {},
+				ts_ls = {},
 			}
 
 			-- Ensure the servers and tools above are installed
@@ -410,6 +468,12 @@ return require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"black",
+				"isort",
+				"biome",
+				"goimports",
+				"gofumpt",
+				"typescript-language-server",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -419,7 +483,7 @@ return require("lazy").setup({
 						local server = servers[server_name] or {}
 						-- This handles overriding only values explicitly passed
 						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for tsserver)
+						-- certain features of an LSP (for example, turning off formatting for ts_ls)
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
 						require("lspconfig")[server_name].setup(server)
 					end,
@@ -556,24 +620,24 @@ return require("lazy").setup({
 					-- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
 					--    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
 					-- Select next/previous item with Tab / Shift + Tab
-					["<Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_next_item()
-						elseif luasnip.expand_or_locally_jumpable() then
-							luasnip.expand_or_jump()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-					["<S-Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item()
-						elseif luasnip.locally_jumpable(-1) then
-							luasnip.jump(-1)
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
+					-- ["<Tab>"] = cmp.mapping(function(fallback)
+					-- 	if cmp.visible() then
+					-- 		cmp.select_next_item()
+					-- 	elseif luasnip.expand_or_locally_jumpable() then
+					-- 		luasnip.expand_or_jump()
+					-- 	else
+					-- 		fallback()
+					-- 	end
+					-- end, { "i", "s" }),
+					-- ["<S-Tab>"] = cmp.mapping(function(fallback)
+					-- 	if cmp.visible() then
+					-- 		cmp.select_prev_item()
+					-- 	elseif luasnip.locally_jumpable(-1) then
+					-- 		luasnip.jump(-1)
+					-- 	else
+					-- 		fallback()
+					-- 	end
+					-- end, { "i", "s" }),
 				}),
 				sources = {
 					{
@@ -747,11 +811,18 @@ return require("lazy").setup({
 			end,
 			formatters_by_ft = {
 				lua = { "stylua" },
-				-- Conform can also run multiple formatters sequentially
-				python = { "black" },
-				--
+				python = { "isort", "black" },
+				go = { "goimports", "gofumpt" },
+				javascript = { "biome" },
+				javascriptreact = { "biome" },
 				typescript = { "biome" },
+				typescriptreact = { "biome" },
+				json = { "biome" },
+				jsonc = { "biome" },
 			},
 		},
+	},
+	{
+		"github/copilot.vim",
 	},
 })
