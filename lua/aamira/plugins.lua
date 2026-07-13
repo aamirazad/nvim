@@ -693,7 +693,4 @@ return require("lazy").setup({
 			},
 		},
 	},
-	{
-		"github/copilot.vim",
-	},
 })
