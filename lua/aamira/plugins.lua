@@ -28,49 +28,23 @@ return require("lazy").setup({
 	},
 	{
 		"nvim-lualine/lualine.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons", lazy = true },
-		config = function()
-			require("lualine").setup({
-				options = {
-					icons_enabled = true,
-					theme = "auto",
-					component_separators = { left = "", right = "" },
-					section_separators = { left = "", right = "" },
-					disabled_filetypes = {
-						statusline = {},
-						winbar = {},
-					},
-					ignore_focus = {},
-					always_divide_middle = true,
-					globalstatus = false,
-					refresh = {
-						statusline = 1000,
-						tabline = 1000,
-						winbar = 1000,
-					},
-				},
-				sections = {
-					lualine_a = { "mode" },
-					lualine_b = { "branch", "diff", "diagnostics" },
-					lualine_c = { "filename" },
-					lualine_x = { "encoding", "fileformat", "filetype" },
-					lualine_y = { "progress" },
-					lualine_z = { "location" },
-				},
-				inactive_sections = {
-					lualine_a = {},
-					lualine_b = {},
-					lualine_c = { "filename" },
-					lualine_x = { "location" },
-					lualine_y = {},
-					lualine_z = {},
-				},
-				tabline = {},
-				winbar = {},
-				inactive_winbar = {},
-				extensions = {},
-			})
-		end,
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+			"tpope/vim-fugitive",
+		},
+		opts = {
+			sections = {
+				lualine_a = { "mode" },
+				-- Avoid lualine's branch component while Lazy is unloading plugins
+				-- during a sync. FugitiveHead provides the same branch information
+				-- without accessing package.loaded from a stale callback.
+				lualine_b = { "FugitiveHead", "diff", "diagnostics" },
+				lualine_c = { "filename" },
+				lualine_x = { "encoding", "fileformat", "filetype" },
+				lualine_y = { "progress" },
+				lualine_z = { "location" },
+			},
+		},
 	},
 	{
 		"goolord/alpha-nvim",
@@ -80,132 +54,80 @@ return require("lazy").setup({
 		end,
 	},
 	{
-		"nvim-telescope/telescope-fzf-native.nvim",
-		build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release --target install",
-	},
-	{ -- Fuzzy Finder (files, lsp, etc)
-		"nvim-telescope/telescope.nvim",
-		event = "VimEnter",
-		branch = "0.1.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
-				"nvim-telescope/telescope-fzf-native.nvim",
+		{ -- Fuzzy Finder (files, lsp, etc)
+			"nvim-telescope/telescope.nvim",
+			event = "VimEnter",
+			branch = "master", -- Updated to master to fix ft_to_lang error
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				{
+					-- Swapped fzf-native for zf-native to heavily prioritize filenames
+					"natecraddock/telescope-zf-native.nvim",
+				},
+				{ "nvim-telescope/telescope-ui-select.nvim" },
 
-				-- `build` is used to run some command when the plugin is installed/updated.
-				-- This is only run then, not every time Neovim starts up.
-				build = "make",
-
-				-- `cond` is a condition used to determine whether this plugin should be
-				-- installed and loaded.
-				cond = function()
-					return vim.fn.executable("make") == 1
-				end,
+				-- Useful for getting pretty icons, but requires a Nerd Font.
+				{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
 			},
-			{ "nvim-telescope/telescope-ui-select.nvim" },
-
-			-- Useful for getting pretty icons, but requires a Nerd Font.
-			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
-		},
-		config = function()
-			-- Telescope is a fuzzy finder that comes with a lot of different things that
-			-- it can fuzzy find! It's more than just a "file finder", it can search
-			-- many different aspects of Neovim, your workspace, LSP, and more!
-			--
-			-- The easiest way to use Telescope, is to start by doing something like:
-			--  :Telescope help_tags
-			--
-			-- After running this command, a window will open up and you're able to
-			-- type in the prompt window. You'll see a list of `help_tags` options and
-			-- a corresponding preview of the help.
-			--
-			-- Two important keymaps to use while in Telescope are:
-			--  - Insert mode: <c-/>
-			--  - Normal mode: ?
-			--
-			-- This opens a window that shows you all of the keymaps for the current
-			-- Telescope picker. This is really useful to discover what Telescope can
-			-- do as well as how to actually do it!
-
-			-- [[ Configure Telescope ]]
-			-- See `:help telescope` and `:help telescope.setup()`
-			require("telescope").setup({
-				-- You can put your default mappings / updates / etc. in here
-				--  All the info you're looking for is in `:help telescope.setup()`
-				--
-				-- defaults = {
-				--   mappings = {
-				--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-				--   },
-				-- },
-				-- pickers = {}
-				extensions = {
-					["ui-select"] = {
-						require("telescope.themes").get_dropdown(),
+			config = function()
+				-- [[ Configure Telescope ]]
+				require("telescope").setup({
+					extensions = {
+						["ui-select"] = {
+							require("telescope.themes").get_dropdown(),
+						},
 					},
-				},
-			}, {
-				rocks = {
-					enabled = false,
-				},
-			})
-
-			-- Enable Telescope extensions if they are installed
-			pcall(require("telescope").load_extension, "fzf")
-			pcall(require("telescope").load_extension, "ui-select")
-
-			-- See `:help telescope.builtin`
-			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
-			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
-
-			-- Slightly advanced example of overriding default behavior and theme
-			vim.keymap.set("n", "<leader>/", function()
-				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
-				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-					winblend = 10,
-					previewer = false,
-				}))
-			end, { desc = "[/] Fuzzily search in current buffer" })
-
-			-- It's also possible to pass additional configuration options.
-			--  See `:help telescope.builtin.live_grep()` for information about particular keys
-			vim.keymap.set("n", "<leader>s/", function()
-				builtin.live_grep({
-					grep_open_files = true,
-					prompt_title = "Live Grep in Open Files",
 				})
-			end, { desc = "[S]earch [/] in Open Files" })
 
-			-- Shortcut for searching your Neovim configuration files
-			vim.keymap.set("n", "<leader>sn", function()
-				builtin.find_files({ cwd = vim.fn.stdpath("config") })
-			end, { desc = "[S]earch [N]eovim files" })
-		end,
+				-- Enable Telescope extensions
+				pcall(require("telescope").load_extension, "zf-native") -- Updated to load zf-native
+				pcall(require("telescope").load_extension, "ui-select")
+
+				-- See `:help telescope.builtin`
+				local builtin = require("telescope.builtin")
+				vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
+				vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
+				vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
+				vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
+				vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
+				vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
+				vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
+				vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
+				vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+				vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+
+				-- Slightly advanced example of overriding default behavior and theme
+				vim.keymap.set("n", "<leader>/", function()
+					builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+						winblend = 10,
+						previewer = false,
+					}))
+				end, { desc = "[/] Fuzzily search in current buffer" })
+
+				-- It's also possible to pass additional configuration options.
+				vim.keymap.set("n", "<leader>s/", function()
+					builtin.live_grep({
+						grep_open_files = true,
+						prompt_title = "Live Grep in Open Files",
+					})
+				end, { desc = "[S]earch [/] in Open Files" })
+
+				-- Shortcut for searching your Neovim configuration files
+				vim.keymap.set("n", "<leader>sn", function()
+					builtin.find_files({ cwd = vim.fn.stdpath("config") })
+				end, { desc = "[S]earch [N]eovim files" })
+			end,
+		},
 	},
+	{ "lukas-reineke/indent-blankline.nvim" },
 	{ "mbbill/undotree" },
 	{
 		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		opts = {
-			sync_install = false,
-			auto_install = true,
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = false,
-			},
-			indent = { enable = true },
-		},
-		config = function(_, opts)
-			require("nvim-treesitter.config").setup(opts)
+		lazy = false,
+		build = { ":TSUpdate" },
+		config = function()
+			require("nvim-treesitter").setup({})
+			require("nvim-treesitter").install({ "c", "lua", "javascript", "html" })
 		end,
 	},
 	{
@@ -249,15 +171,24 @@ return require("lazy").setup({
 	},
 	{
 		"rose-pine/neovim",
-		priority = 1000,
-		config = function()
-			vim.opt.background = "dark"
-			require("rose-pine").setup({
-				disable_background = true,
-			})
-			vim.cmd("colorscheme rose-pine")
-		end,
+		name = "rose-pine",
 	},
+	{
+		"tpope/vim-fugitive",
+		keys = {
+			{
+				"<leader>gs",
+				"<cmd>Git<cr>",
+				desc = "[G]it [S]tatus",
+			},
+			{
+				"<leader>gd",
+				"<cmd>Gvdiffsplit<cr>",
+				desc = "[G]it [D]iff current file",
+			},
+		},
+	},
+	{ "nvimtools/none-ls.nvim" },
 	{
 		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
@@ -716,66 +647,6 @@ return require("lazy").setup({
 		event = "InsertEnter",
 		config = true,
 		opts = {},
-	},
-	{
-		"akinsho/bufferline.nvim",
-		dependencies = {
-			"moll/vim-bbye",
-			"nvim-tree/nvim-web-devicons",
-		},
-		config = function()
-			require("bufferline").setup({
-				options = {
-					mode = "buffers", -- set to "tabs" to only show tabpages instead
-					themable = true, -- allows highlight groups to be overriden i.e. sets highlights as default
-					numbers = "none", -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
-					close_command = "Bdelete! %d", -- can be a string | function, see "Mouse actions"
-					buffer_close_icon = "✗",
-					close_icon = "✗",
-					path_components = 1, -- Show only the file name without the directory
-					modified_icon = "●",
-					left_trunc_marker = "",
-					right_trunc_marker = "",
-					max_name_length = 30,
-					max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
-					tab_size = 21,
-					diagnostics = false,
-					diagnostics_update_in_insert = false,
-					color_icons = true,
-					show_buffer_icons = true,
-					show_buffer_close_icons = true,
-					show_close_icon = true,
-					persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
-					separator_style = { "│", "│" }, -- | "thick" | "thin" | { 'any', 'any' },
-					enforce_regular_tabs = true,
-					always_show_bufferline = true,
-					show_tab_indicators = false,
-					indicator = {
-						-- icon = '▎', -- this should be omitted if indicator style is not 'icon'
-						style = "none", -- Options: 'icon', 'underline', 'none'
-					},
-					icon_pinned = "󰐃",
-					minimum_padding = 1,
-					maximum_padding = 5,
-					maximum_length = 15,
-					sort_by = "insert_at_end",
-				},
-				highlights = {
-					separator = {
-						fg = "#434C5E",
-					},
-					buffer_selected = {
-						bold = true,
-						italic = false,
-					},
-					-- separator_selected = {},
-					-- tab_selected = {},
-					-- background = {},
-					-- indicator_selected = {},
-					-- fill = {},
-				},
-			})
-		end,
 	},
 	{ -- Autoformat
 		"stevearc/conform.nvim",
