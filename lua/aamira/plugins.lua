@@ -12,12 +12,13 @@ return require("lazy").setup({
 			"MunifTanjim/nui.nvim",
 		},
 		cmd = "Neotree",
+		lazy = false,
 		keys = {
 			{ "\\", ":Neotree toggle<cr>", desc = "NeoTree reveal", silent = true },
 		},
 		opts = {
 			filesystem = {
-				hijack_netrw_behavior = "/pen_current",
+				hijack_netrw_behavior = "open_current",
 				window = {
 					mappings = {
 						["\\"] = "close_window",
@@ -239,7 +240,16 @@ return require("lazy").setup({
 			}
 			for type, icon in pairs(diagnostic_icons) do
 				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+				vim.diagnostic.config({
+					signs = {
+						text = {
+							[vim.diagnostic.severity.ERROR] = " ",
+							[vim.diagnostic.severity.WARN] = " ",
+							[vim.diagnostic.severity.INFO] = " ",
+							[vim.diagnostic.severity.HINT] = "󰌵 ",
+						},
+					},
+				})
 			end
 			vim.diagnostic.config({
 				virtual_text = { prefix = "●" },
@@ -345,11 +355,11 @@ return require("lazy").setup({
 					-- code, if the language server you are using supports them
 					--
 					-- This may be unwanted, since they displace some of your code
-					-- if client then
-					-- 	map("<leader>th", function()
-					-- 		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-					-- 	end, "[T]oggle Inlay [H]ints")
-					-- end
+					if client then
+						map("<leader>th", function()
+							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+						end, "[T]oggle Inlay [H]ints")
+					end
 				end,
 			})
 
@@ -399,12 +409,7 @@ return require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
-				"black",
-				"isort",
 				"biome",
-				"goimports",
-				"gofumpt",
-				"typescript-language-server",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
